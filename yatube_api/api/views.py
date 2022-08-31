@@ -22,7 +22,8 @@ class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
 
     def get_post(self):
-        return get_object_or_404(Post, pk=self.kwargs.get('post_id'))
+        return get_object_or_404(Post.objects.prefetch_related('comments'),
+                                 pk=self.kwargs.get('post_id'))
 
     def get_queryset(self):
         return Comment.objects.filter(post=self.get_post())
